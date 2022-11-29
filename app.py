@@ -21,6 +21,10 @@ mail = Mail(app)
 
 app.config['SECRET_KEY'] ='needbucin'
 storage = []
+userData = {
+    "email" : '',
+    "otp": ''
+}
 # Token Required
 def token_required(f):
     @wraps(f)
@@ -112,8 +116,28 @@ def delete():
 # https://stackoverflow.com/questions/72547853/unable-to-send-email-in-c-sharp-less-secure-app-access-not-longer-available/72553362#72553362
 @app.route('/email',methods=['GET'])
 def sendEmail():
-    email = "xaseya7231@xegge.com"
-    msg = Message('Confirm Email',sender='noreply@demo.com',recipients=[email])
-    msg.body = 'Test msg'
-    mail.send(msg)
-    return 'Sent'
+    return render_template('email.html')
+
+@app.route('/verify',methods=['GET','POST'])
+def verify():
+    email = request.form['email']
+    userData['emai'] = email
+    msg = Message('Confirm Email',sender='test@fuck.com',recipients=[email])
+    otp = generateOTP()
+    userData['otp'] = otp
+    msg.body = f'Hello your OTP is: {otp}'
+    print(email)
+    # print(userData['emai'])
+    print(otp)
+    # mail.send(msg)
+    return render_template('verify.html')
+
+@app.route('/validate',methods=['POST'])
+def validate():
+    userOTP = request.form['otp']
+    if userData['otp'] == userOTP:
+        token = jwt.encode({'user':userData['emai'], 'exp':datetime.datetime.utcnow()+datetime.timedelta(minutes=10)},app.config['SECRET_KEY'])
+        storage.append(token)
+        return 'OTP valid'
+    else:
+        return 'OTP salah'
