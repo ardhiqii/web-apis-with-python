@@ -25,6 +25,7 @@ userData = {
     "email" : '',
     "otp": ''
 }
+
 # Token Required
 def token_required(f):
     @wraps(f)
@@ -37,7 +38,18 @@ def token_required(f):
             return jsonify({'message':'Token is invalid'}),403
         return f(*args,**kwargs)
     return decorated
-    
+# API KEY Required
+def api_key_required(f) :
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        key = request.args.get('apiid')
+        if key != app.config['API_KEY']:
+            print(key)
+            print(app.config['API_KEY'])
+            print(key != app.config['API_KEY'])
+            return jsonify({'message':'API KEY tidak ada atau tidak valid'})
+        return f(*args,**kwargs)
+    return decorated
 #Login
 @app.route('/login',methods=['GET','POST'])
 def login():
@@ -52,8 +64,7 @@ def login():
         else:
             return('Password atau username salah')
     return render_template('login.html')
-
-# Define what the app does
+# # Define what the app does
 @app.route("/",methods=['GET','POST'])
 def index():
     cur = mysql.connection.cursor()
@@ -72,46 +83,10 @@ def index():
     print(f'storage: {storage}')
     return render_template('index.html',data = data)
 
-@app.route("/create",methods=['GET','POST'])
-@token_required
+@app.route('/create',methods=['GET','POST'])
+@api_key_required
 def create():
-    cur = mysql.connection.cursor()
-    if request.method == 'POST':
-        form = request.form
-        year = form['year']
-        stateAbbr = form['state_abbr']
-        stateName = form['state_name']
-        query = f'insert into {table} (year,state_abbr,state_name) values ({year},"{stateAbbr}","{stateName}")'
-        cur.execute(query)
-        print(query)
-        mysql.connection.commit()
-        return 'success'
-
-    return render_template('create.html')
-@app.route('/update',methods=['GET','POST','PUT'])
-def update():
-    cur = mysql.connection.cursor()
-    if request.method == 'PUT':
-        payload = request.get_json()
-        year = payload['year']
-        stateAbbr = payload['state_abbr']
-        stateName = payload['state_name']
-        query = f'update {table} set state_name = "{stateName}" where year = {year} and state_abbr ="{stateAbbr}"'
-        cur.execute(query)
-        print(query)
-        mysql.connection.commit()
-    return render_template('update.html')
-@app.route('/delete',methods=['GET','POST','DELETE'])
-def delete():
-    cur = mysql.connection.cursor()
-    if request.method == 'DELETE':
-        payload = request.get_json()
-        year = payload['year']
-        query = f'delete from {table} where year = {year}'
-        cur.execute(query)
-        mysql.connection.commit()
-    return render_template('delete.html')
-
+    return ('butuh api key')
 # Test Email
 # https://stackoverflow.com/questions/72547853/unable-to-send-email-in-c-sharp-less-secure-app-access-not-longer-available/72553362#72553362
 @app.route('/email',methods=['GET'])
@@ -129,7 +104,7 @@ def verify():
     print(email)
     # print(userData['emai'])
     print(otp)
-    # mail.send(msg)
+    mail.send(msg)
     return render_template('verify.html')
 
 @app.route('/validate',methods=['POST'])
@@ -141,3 +116,5 @@ def validate():
         return 'OTP valid'
     else:
         return 'OTP salah'
+if __name__ == "__main__":
+    app.run(debug=True)
