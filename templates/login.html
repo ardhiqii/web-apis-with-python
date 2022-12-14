@@ -19,15 +19,9 @@
             <label>password:</label>
             <input type="password" name="password" id="" />
           </div>
-          <button onclick="redirect()">Submit</button>
+          <button>Submit</button>
         </form>
       </div>
     </div>
   </body>
-  <script>
-    localStorage.setItem("token", "{{token}}");
-    function redirect() {
-      window.location.href = "http://127.0.0.1:5000/";
-    }
-  </script>
 </html>
