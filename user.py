@@ -16,6 +16,7 @@ def checkValidation(username,password):
             return False
     except:
         return False
+        
 def generateOTP():
     finalOTP= ''
     for i in range (4):
