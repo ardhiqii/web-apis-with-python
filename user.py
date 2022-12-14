@@ -1,16 +1,24 @@
 import random
 user = {
-    'aufa':'yepyepyep',
-    'rakha':'hedon',
-    'kafi':'player',
-    'dafeb':'dafap',
-    'dito':'meong'
+    'aufa':{
+        "password":"sunardi",
+        'email':'ardhiqi@gmail.com',
+        "role":"user"
+    },
+    'dito':{
+        "password":"leo",
+        "email":'ammarditoshafaat2001@gmail.com',
+        "role":"admin"
+    }
 }
 
 def checkValidation(username,password):
     try:
-        pw = user[username]
+        pw = user[username]['password']
         if pw == password:
+            # currentUser['name'] = username
+            # currentUser['email'] = user[username]['email']
+            # currentUser['role'] = user[username]['role']
             return True
         else:
             return False

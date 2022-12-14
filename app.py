@@ -1,13 +1,16 @@
-from flask import Flask, jsonify, request, render_template, make_response, url_for,redirect
+from flask import Flask, jsonify, request, render_template, make_response, url_for,redirect,session
 import json
 import jwt # Perlu install pip3 install PyJWT diawal
 import datetime
+import urllib.request, json
 from functools import wraps
 from flask_mysqldb import MySQL
 from flask_mail import Mail,Message #pip install Flask-Mail
 from user import *
+from data.crimes import *
 # Intitialise the app
 app = Flask(__name__)
+app.config['JSON_SORT_KEYS'] = False
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
