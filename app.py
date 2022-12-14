@@ -23,7 +23,6 @@ app.config.from_pyfile('config.cfg')
 mail = Mail(app)
 
 app.config['SECRET_KEY'] ='needbucin'
-
 # Token Required
 def token_required(f):
     @wraps(f)
