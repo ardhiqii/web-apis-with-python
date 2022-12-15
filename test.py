@@ -1,4 +1,3 @@
-from data.crimes import *
-from user import *
-checkValidation('aufa','sunardi')
-print(currentUser['token'] == "")
+
+for i in range (1,3):
+    print(i)

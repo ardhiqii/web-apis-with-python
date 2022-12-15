@@ -9,6 +9,10 @@ user = {
         "password":"leo",
         "email":'ammarditoshafaat2001@gmail.com',
         "role":"admin"
+    },
+    'p2w':{
+        "password":"p2w",
+        "role":'admin'
     }
 }
 

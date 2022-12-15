@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/coreAPI.css" />
+    <title>Document</title>
+    <style>
+      {% for i in range(1,lenData+1) %}
+      .box-container:nth-child({{i}}) .statusColor{
+          background-color: {{data[i-1]['hex']}};
+      }
+      {% endfor %}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Core API Crime</h1>
+      </div>
+      <div class="content-container">
+        <div class="boxes-container">
+          {% if data %} {% for d in data %}
+          <div class="box-container">
+            <div class="stateName">
+              <p><b>State Name : </b>{{d['state']}}</p>
+            </div>
+            <div class="crimeRate"><b>Crime Rate : </b>{{d['crimeRate']}}</div>
+            <div class="mostCrimeName">
+              <b>Most Crime Name : </b> {{d['mostCrimeName']}}
+            </div>
+            <div class="totalReportCrime">
+              <b>Total Report The Most Crime : </b>{{d['totalReportCrime']}}
+            </div>
+            <div class="status">
+              <b>Status : </b>
+              <div class="statusColor"></div>
+            </div>
+            {{d['hex']}}
+          </div>
+          {% endfor %} {% else %}
+          <h2>Data tidak ada</h2>
+          {% endif %}
+        </div>
+        <div class="container-form">
+          <form method="POST">
+            <div class="container-input">
+              <label>City: </label>
+              <input type="text" name="city" />
+            </div>
+            <button>Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
